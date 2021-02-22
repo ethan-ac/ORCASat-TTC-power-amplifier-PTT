@@ -1,0 +1,66 @@
+id: ampkey_keyer
+label: keyer
+category: '[ampkey]'
+
+templates:
+  imports: import ampkey
+  # ${type.size}*${vlen} replaces ${itemsize} to allow for selecting input data type/# inputs
+  make: ampkey.keyer(${type.size}*${vlen}, ${pre_tx}, ${post_tx})
+
+
+# declareable variables for this block in the flowgraph
+parameters:
+# allows selection of input data type
+- id: type
+  label: Type
+  dtype: enum
+  options: [complex, float, int, short, byte]
+  option_attributes:
+      size: [gr.sizeof_gr_complex, gr.sizeof_float, gr.sizeof_int, gr.sizeof_short,
+          gr.sizeof_char]
+  hide: part
+# allows select #inputs
+- id: num_ports
+  label: Num Ports
+  dtype: int
+  default: '1'
+  hide: part
+# for setting length of data type used
+- id: vlen
+  label: Vec Length
+  dtype: int
+  default: '1'
+  hide: ${ 'part' if vlen == 1 else 'none' }
+# time to keep amp keyed before first data is sent
+- id: pre_tx
+  label: Pre TX Delay (ms)
+  dtype: int
+  default: 50
+# time to keep amp keyed after last data is sent
+- id: post_tx
+  label: Post TX Delay (ms)
+  dtype: int
+  default: 50
+
+
+# port for this block
+# input that has selectible type and # inputs
+inputs:
+-   domain: stream
+    dtype: ${ type }
+    vlen: ${ vlen }
+    multiplicity: ${ num_ports }
+
+
+# summary of this blocks purpose that will appear in the documentation tab of its properties
+documentation: |-
+    This block toggles the rts# pin of a usb/serial converter for specified durations before and after the USRP transmits data and for the duration that the USRP is transmitting. 
+
+# dont allow there to be < 1 ports, so minimum # inputs is 1
+asserts:
+- ${ num_ports > 0 }
+- ${ vlen > 0 }
+
+#  'file_format' specifies the version of the GRC yml format used in the file
+#  and should usually not be changed.
+file_format: 1
