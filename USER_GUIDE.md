@@ -71,3 +71,11 @@ To use the "Amp Key" hier block add it to the desired flowgraph, set the editabl
 Plug the USB-to-serial converter into the computer being used. Connect the probes of the oscilloscope to the SDR# and GND pins of the USB-to-serial converter and set up the appropriate triggers to view when the state of the SDR# pin switches.
 
 If a flowgraph with the "Amp Key" hier block crashes and the block stops working, restarting the computer being used is advised.
+
+![](/images/ampkey_hier_block.png)
+
+<div align="center">The "Amp Key" hier block how it should be connected to the flowgraph.
+
+![](/images/inside_ampkey_hier_block.png)
+
+<div align="center">Viewing inside the "Amp Key" hier block.
