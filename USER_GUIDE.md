@@ -72,10 +72,14 @@ Plug the USB-to-serial converter into the computer being used. Connect the probe
 
 If a flowgraph with the "Amp Key" hier block crashes and the block stops working, restarting the computer being used is advised.
 
+<div align="center">
+
 ![](/images/ampkey_hier_block.png)
 
-<div align="center">The "Amp Key" hier block how it should be connected to the flowgraph.
+The "Amp Key" hier block how it should be connected to the flowgraph.
 
 ![](/images/inside_ampkey_hier_block.png)
 
-<div align="center">Viewing inside the "Amp Key" hier block.
+Viewing inside the "Amp Key" hier block.
+
+<div align="center">
