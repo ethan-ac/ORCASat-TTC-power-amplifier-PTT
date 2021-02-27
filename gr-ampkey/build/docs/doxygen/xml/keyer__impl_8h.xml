@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="keyer__impl_8h" kind="file" language="C++">
+    <compoundname>keyer_impl.h</compoundname>
+    <includes refid="keyer_8h" local="no">ampkey/keyer.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>ampkey/api.h</label>
+        <link refid="api_8h"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>gnuradio/sync_block.h</label>
+      </node>
+      <node id="4">
+        <label>gnuradio/attributes.h</label>
+      </node>
+      <node id="1">
+        <label>keyer_impl.h</label>
+        <link refid="keyer__impl_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>ampkey/keyer.h</label>
+        <link refid="keyer_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classgr_1_1ampkey_1_1keyer__impl" prot="public">gr::ampkey::keyer_impl</innerclass>
+    <innernamespace refid="namespacegr">gr</innernamespace>
+    <innernamespace refid="namespacegr_1_1ampkey">gr::ampkey</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ethan/install/gr-ampkey/lib/keyer_impl.h"/>
+  </compounddef>
+</doxygen>

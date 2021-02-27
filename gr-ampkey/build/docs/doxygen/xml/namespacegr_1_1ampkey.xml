@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacegr_1_1ampkey" kind="namespace" language="C++">
+    <compoundname>gr::ampkey</compoundname>
+    <innerclass refid="classgr_1_1ampkey_1_1keyer" prot="public">gr::ampkey::keyer</innerclass>
+    <innerclass refid="classgr_1_1ampkey_1_1keyer__impl" prot="public">gr::ampkey::keyer_impl</innerclass>
+    <innerclass refid="classgr_1_1ampkey_1_1samp__delay" prot="public">gr::ampkey::samp_delay</innerclass>
+    <innerclass refid="classgr_1_1ampkey_1_1samp__delay__impl" prot="public">gr::ampkey::samp_delay_impl</innerclass>
+      <sectiondef kind="var">
+      <memberdef kind="variable" id="namespacegr_1_1ampkey_1ac52ce313a475744168c6ba1ca4495291" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::ampkey::amp_tx</definition>
+        <argsstring></argsstring>
+        <name>amp_tx</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/ethan/install/gr-ampkey/lib/keyer_impl.h" line="32" column="14" declfile="/home/ethan/install/gr-ampkey/lib/keyer_impl.h" declline="32" declcolumn="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ethan/install/gr-ampkey/include/ampkey/keyer.h" line="28" column="18"/>
+  </compounddef>
+</doxygen>
