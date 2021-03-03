@@ -35,7 +35,7 @@ $ sudo apt install gnuradio
 
 ### OOT Module
 
-Install command for gr-ampkey
+Install command for gr-ampkey. If you plan on making changes to the repository it is recommended that you copy the gr-ampkey directory to another location and do editing and building there, then delete the build directory and copy the gr-ampkey directory back into the power-amplifier-ptt directory. Mainly so your build directory isnt accidentally uploaded to the repository.
 ```
 $ git clone https://github.com/whateverthislinkendsupbeing/gr-ampkey.git
 ```
