@@ -1,11 +1,11 @@
 #!/bin/sh
 # run uninstall target
-if [ -d "build" ]; then
-	cd build
-	sudo make uninstall
-	cd ..
-	sudo rm -rf build
-fi
+# if [ -d "build" ]; then
+#	cd build
+#	sudo make uninstall
+#	cd ..
+#	sudo rm -rf build
+# fi
 
 # manually remove rogue shared objects (not
 # doing this step will not affect the build,
