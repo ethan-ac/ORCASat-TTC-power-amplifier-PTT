@@ -35,12 +35,12 @@ parameters:
 - id: pre_tx
   label: Pre TX Delay (ms)
   dtype: int
-  default: pre_tx
+  default: 50
 # sample rate of flowgraph at point of this block, for calculating # samples to pad
 - id: samp_rate
   label: Sample Rate
   dtype: int
-  default: samp_rate_iq
+  default: 2000000
 
 # ports for this block
 # input that has selectible type and # inputs
