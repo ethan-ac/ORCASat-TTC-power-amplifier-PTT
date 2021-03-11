@@ -29,6 +29,10 @@ These are links to all of the necessary programs and resources for the power amp
 
 Install commands for the OOT module gr-ampkey. If you make changes to the OOT modules in this repository, make sure you delete the ~/build directory from the OOT module before pushing to this repository.This is because this directory is specific to your computer and won't work on another persons computer.
 
+Allow USB-to-serial converter file in Linux to be accessed without permissions.
+```
+$ sudo usermod -a -G dialout $USER
+```
 Install power amplifier PTT resources
 ```
 $ git clone https://gitlab.com/ORCASat/ttc/power-amplifier-ptt.git
@@ -50,10 +54,10 @@ $ sudo ldconfig
 ```
 Updating the OOT module can be done manually by using the following commands ~/power-amplifier-ptt/gr-ampkey/build.
 ```
-cmake ..
-make
-sudo make install
-sudo ldconfig
+$ cmake ..
+$ make
+$ sudo make install
+$ sudo ldconfig
 ```
 
 ### Hier blocks
