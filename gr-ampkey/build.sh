@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 # run uninstall target
 # if [ -d "build" ]; then
 #	cd build
