@@ -1,5 +1,5 @@
 id: ampkey_samp_delay
-label: samp_delay
+label: Repeat Sample Delay
 category: '[ampkey]'
 
 templates:

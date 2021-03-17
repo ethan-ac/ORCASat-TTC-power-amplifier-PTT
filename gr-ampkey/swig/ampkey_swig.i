@@ -16,3 +16,4 @@
 GR_SWIG_BLOCK_MAGIC2(ampkey, samp_delay);
 %include "ampkey/keyer.h"
 GR_SWIG_BLOCK_MAGIC2(ampkey, keyer);
+

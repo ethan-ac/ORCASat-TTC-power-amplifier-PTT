@@ -24,8 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "samp_delay_impl.h"
-// allows amp_tx (time it will take data to be sent, to be added to target time) to be used here
-#include "keyer_impl.h"
+//#include "keyer_impl.h"
 #include <vector>
 #include <iostream>
 #include <string.h>
@@ -110,21 +109,10 @@ namespace gr {
     	    		current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     	    		// clock ends when current_millis reaches target_millis
     	    		if(target_millis <= current_millis){
-    				// time block (and USRP) takes to pass actual data samples (not delay samples)
-    				int time_taken = (current_millis - ending_millis) - transmit_millis;
-    				// block receives some samples upon startup of the flowgraph
-    				// this prevents those samples from setting amp_tx
-    				if(init){
-    					// sets time it will take data to be sent by USRP
-    					// will be added to a target_millis of ampl_keyer_impl.cc
-    					amp_tx = std::max(time_taken, count_actual_samples) + 5;
-    				}
-    				// resets count_actual_samples/transmit_state/init/d_delta
+    				// resets count_actual_samples/transmit_state/d_delta
     				// d_delta reset so delay samples will be inserted at beginning of next set of samples
     				// (which is a pdu converted to tagged stream)
-    				count_actual_samples = 0;
     				transmit_state = true;
-    				init = true;
     				d_delta = pre_tx_samp;
     			}
 		}

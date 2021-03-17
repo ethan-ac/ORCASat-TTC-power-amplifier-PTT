@@ -38,14 +38,10 @@
 #include <fcntl.h>      // File control definitions
 #include <errno.h>      // Error number definitions
 #include <termios.h>    // POSIX terminal control definitions
+#include <math.h>
 
 namespace gr {
   namespace ampkey {
-  
-  // variable declared here so it can be shared with que_delay_impl.cc
-  // time it will take data to be sent
-  // will be added to target time
-  int amp_tx = 0;
 
     keyer::sptr keyer::make(size_t itemsize, int pre_tx, int post_tx)
     {
@@ -109,8 +105,8 @@ namespace gr {
         	}
         	
         	// d_pre_tx clock
-        	// runs for duration of d_pre_tx milliseconds
-        	// then starts amp_tx clock
+        	// runs for duration of d_pre_tx and amp_tx milliseconds
+        	// then starts d_post_tx clock
         	if(pre_target_millis > pre_current_millis && d_pre_tx_state){
       			// update pre_current_millis
     	    		pre_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -122,42 +118,19 @@ namespace gr {
     	    		}
     	    		// d_pre_tx clock ends when pre_current_millis reaches pre_target_millis
     	    		if(pre_target_millis <= pre_current_millis){
-    	    			// updates mid_current_millis to current time
-    	    			mid_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    	    			// set mid_target_millis to the present time so that it is saved for later
-    	    			mid_target_millis = mid_current_millis;
-    	    			// stops d_pre_tx clock and starts amp_tx clock
+    	    			// updates post_current_millis to current time
+    	    			post_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    			// set post_target_millis to be time when ptt can untoggle
+    	    			post_target_millis = post_current_millis + d_post_tx;
+    	    			// stops d_pre_tx clock and starts d_post_tx clock
     	    			d_pre_tx_state = false;
-    	    			amp_tx_state = true;
+    	    			d_post_tx_state = true;
+    	    			
     	    		}
         	}
         	
-        	// amp_tx clock
-        	// waits for amp_tx to be set
-        	// then starts d_post_tx clock
-        	if(amp_tx_state){
-        		// update mid_current_millis
-        		mid_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        		// amp_tx clock ends when amp_tx is set by samp_delay_impl.cc
-        		if(amp_tx > 0){
-        			// find milliseconds it took for amp_tx to be set
-        			int diff = mid_current_millis - mid_target_millis;
-        			// updates post_current_millis to current time
-        			post_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        			// set post_target_millis
-        			// subtract amount of time that has passed while in amp_tx clock
-        			// from what post_target_millis would normally be
-        			post_target_millis = post_current_millis + d_post_tx + amp_tx - diff;
-        			// reset amp_tx to allow amp_tx clock to stop
-        			amp_tx = 0;
-        			// stops amp_tx clock and starts d_post_tx clock
-        			amp_tx_state = false;
-        			d_post_tx_state = true;
-        		}
-        	}
-        	
         	// d_post_tx clock
-        	// runs for duration of amp_tx and d_post_tx milliseconds
+        	// runs for duration of d_post_tx milliseconds
         	// then resets all clocks
         	if(post_target_millis > post_current_millis && d_post_tx_state){
       			// update post_current_millis
@@ -166,12 +139,11 @@ namespace gr {
     	    		if(post_target_millis <= post_current_millis){
     	    			// toggles rts# pin off of usb/serial by closing file for that usb/serial device
     	        		close(USB);
-    	        		// reset USB_state/state/d_pre_tx_state/amp_tx_state/d_post_tx_state
+    	        		// reset USB_state/state/d_pre_tx_state/d_post_tx_state
     	        		// for next time a set of samples (which is a pdu converted to a tagged stream) is received
     	        		USB_state = true;
     	        		state = true;
     	        		d_pre_tx_state = true;
-    	        		amp_tx_state = false;
     	        		d_post_tx_state = false;
     	    		}
         	}
@@ -184,16 +156,28 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-    	// must be char so port data type can be configurable
-    	//
-    	const char *in = (const char *) input_items[0];
+    	uint64_t abs_N, end_N;
+        for (size_t i = 0; i < input_items.size(); i++) {
+        	abs_N = nitems_read(i);
+        	end_N = abs_N + (uint64_t)(noutput_items);
+        	get_tags_in_range(d_work_tags, i, abs_N, end_N);
+        	for (const auto& tag : d_work_tags) {
+			d_tag_value = pmt::to_long(tag.value);
+		}
+        }
     	
     	// makes it so pre_target_millis is only set by first sample
     	if(state){
     		// updates pre_current_millis to current time
     		pre_current_millis = 		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    		// calculated by putting total packet length into line equation
+    		int amp_tx = ceil((d_tag_value * 0.83) + 4);
     		// set pre_target_millis when a sample is received to allow d_pre_tx clock to start
-    		pre_target_millis = pre_current_millis + d_pre_tx;
+    		// pre_current_millis is current time
+    		// d_pre_tx is ptt toggle time before tx
+    		// amp_tx is ptt toggle time during tx
+    		// OFFSET is to compensate for inherent shortening of ptt period by usb/serial cable
+    		pre_target_millis = pre_current_millis + d_pre_tx + amp_tx + OFFSET;
     		state = false;
     	}
     	

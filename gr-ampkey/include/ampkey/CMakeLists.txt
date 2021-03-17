@@ -24,5 +24,6 @@
 install(FILES
     api.h
     samp_delay.h
-    keyer.h DESTINATION include/ampkey
+    keyer.h
+    DESTINATION include/ampkey
 )

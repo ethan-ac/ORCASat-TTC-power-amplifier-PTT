@@ -65,11 +65,6 @@ namespace gr {
       
       // makes it so transmit is only set once at proper time stated above
       bool transmit_state = true;
-      
-      // block receives some samples upon startup of the flowgraph
-      // this prevents those samples from setting amp_tx
-      bool init = false;
-
 
      public:
       samp_delay_impl(size_t itemsize, int pre_tx, int samp_rate);
