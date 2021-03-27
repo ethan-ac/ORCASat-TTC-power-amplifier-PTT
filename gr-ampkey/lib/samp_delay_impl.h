@@ -22,9 +22,18 @@
 #define INCLUDED_AMPKEY_SAMP_DELAY_IMPL_H
 
 #include <ampkey/samp_delay.h>
+/*
 // include for continuously running function
 #include <atomic>
-
+#include <vector>
+#include <iostream>
+#include <string.h>
+#include <cstring>
+#include <chrono>
+#include <sys/time.h>
+#include <ctime>
+#include <math.h>
+*/
 namespace gr {
   namespace ampkey {
 
@@ -45,26 +54,22 @@ namespace gr {
       // sample rate of flowgraph through this block
       int d_samp_rate;
       
-      // # samples before data is sent, used as value for delay
+      // # samples before data is sent
+      // used as value for delay
       int pre_tx_samp = d_samp_rate*d_pre_tx/1000;
       
       // time before block declares last sample has been received
       int ending_millis = 10;
       
-      // sets length of delay in samples
+      // sets duration of delay in samples
       int d_delta;
       
       // clock current and target times, set to 0 initially so clock wont start on flowgraph startup
       long current_millis = 0;	// current time in milliseconds when clock is running
       long target_millis = 0;		// target time for current time to reach in milliseconds
-      // time when block has finished adding delay samples and has begun passing actual data samples (not delay samples)
-      long transmit_millis;
       
       // actual # data samples that went through the block before last sample has been received
       int count_actual_samples = 0;
-      
-      // makes it so transmit is only set once at proper time stated above
-      bool transmit_state = true;
 
      public:
       samp_delay_impl(size_t itemsize, int pre_tx, int samp_rate);
@@ -85,7 +90,7 @@ namespace gr {
       void forecast (int noutput_items, gr_vector_int &ninput_items_required);
       
       // runs when samples are received
-      // adds delay samples (inserts 0's) to data stream before each set of samples (which is a pdu converted to tagged stream) that are passed through this block
+      // adds delay samples (inserts 0's) to data stream before each set of samples that are passed through this block
       int general_work(int noutput_items,
            gr_vector_int &ninput_items,
            gr_vector_const_void_star &input_items,

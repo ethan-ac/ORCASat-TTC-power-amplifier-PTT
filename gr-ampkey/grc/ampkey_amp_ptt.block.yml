@@ -1,14 +1,18 @@
-id: ampkey_keyer
-label: Amplifier PTT
+id: ampkey_amp_ptt
+label: Power Amplifier PTT
 category: '[ampkey]'
 
 templates:
   imports: import ampkey
-  # ${type.size}*${vlen} replaces ${itemsize} to allow for selecting input data type/# inputs
-  make: ampkey.keyer(${type.size}*${vlen}, ${pre_tx}, ${post_tx})
+  # ${type.size}*${vlen} allows for selecting input data type/# inputs/outputs
+  make: ampkey.amp_ptt(${type.size}*${vlen}, ${pre_tx}, ${post_tx}, ${file})
 
 
-# declareable variables for this block in the flowgraph
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 parameters:
 # allows selection of input data type
 - id: type
@@ -41,9 +45,20 @@ parameters:
   label: Post TX Delay (ms)
   dtype: int
   default: 50
+# location of file that controls USB/serial cable
+- id: file
+  label: USB/serial cable file
+  dtype: string
+  default: /dev/ptt
 
 
-# port for this block
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
 # input that has selectible type and # inputs
 inputs:
 -   domain: stream
@@ -54,7 +69,7 @@ inputs:
 
 # summary of this blocks purpose that will appear in the documentation tab of its properties
 documentation: |-
-    This block toggles the rts# pin of a usb/serial converter for specified durations before and after the USRP transmits data and for the duration that the USRP is transmitting. 
+    This block toggles the rts# pin of a usb/serial cable before, during, and after the USRP transmits data.
 
 # dont allow there to be < 1 ports, so minimum # inputs is 1
 asserts:

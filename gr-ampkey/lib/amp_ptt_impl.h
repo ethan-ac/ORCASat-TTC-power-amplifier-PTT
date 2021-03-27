@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2021 gr-ampkey author.
+ * Copyright 2021 ethan.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_AMPKEY_KEYER_IMPL_H
-#define INCLUDED_AMPKEY_KEYER_IMPL_H
+#ifndef INCLUDED_AMPKEY_AMP_PTT_IMPL_H
+#define INCLUDED_AMPKEY_AMP_PTT_IMPL_H
 
-#include <ampkey/keyer.h>
+#include <ampkey/amp_ptt.h>
+/*
+// includes for clock
+#include <chrono>
+#include <iostream>
+#include <sys/time.h>
+#include <ctime>
+#include <vector>
+*/
+/*
+// includes for usb/serial converter
+#include <stdio.h>      // standard input / output functions
+#include <stdlib.h>
+#include <string.h>     // string function definitions
+#include <unistd.h>     // UNIX standard function definitions
+#include <fcntl.h>      // File control definitions
+#include <errno.h>      // Error number definitions
+#include <termios.h>    // POSIX terminal control definitions
+#include <math.h>
+*/
 // OFFSET is to compensate for inherent shortening of ptt period by usb/serial cable
-#define OFFSET 5
+#define PTT_OFFSET 5
 
 namespace gr {
   namespace ampkey {
-  
-    class keyer_impl : public keyer
+
+    class amp_ptt_impl : public amp_ptt
     {
      private:
       // for continuously running function
@@ -44,7 +63,7 @@ namespace gr {
       //time after data is sent
       int d_post_tx;
       
-      // will be used to toggle rts# pin on usb/serial
+      // will be used to toggle rts# pin on usb/serial cable
       int USB;
       
       // clock current and target times, set to 0 initially so clock wont start on flowgraph startup
@@ -66,11 +85,15 @@ namespace gr {
       
       // tags from last work
       std::vector<tag_t> d_work_tags;
+      // saves value of tag from last work
       int d_tag_value;
+      
+      // location of file that controls USB/serial cable
+      std::string d_file;
 
      public:
-      keyer_impl(size_t itemsize, int pre_tx, int post_tx);
-      ~keyer_impl();
+      amp_ptt_impl(size_t itemsize, int pre_tx, int post_tx, std::string file);
+      ~amp_ptt_impl();
 
       // continuously running functions where clock runs
       void run();
@@ -78,7 +101,7 @@ namespace gr {
       bool stop() override;
       
       // runs whenever sample is received
-      // pre_current_millis is updated and pre_target_millis is set here when first sample is received
+      // starts clock when sample is received
       int work(
               int noutput_items,
               gr_vector_const_void_star &input_items,
@@ -89,6 +112,5 @@ namespace gr {
   } // namespace ampkey
 } // namespace gr
 
-
-#endif /* INCLUDED_AMPKEY_KEYER_IMPL_H */
+#endif /* INCLUDED_AMPKEY_AMP_PTT_IMPL_H */
 

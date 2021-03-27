@@ -24,15 +24,6 @@
 
 #include <gnuradio/io_signature.h>
 #include "samp_delay_impl.h"
-//#include "keyer_impl.h"
-#include <vector>
-#include <iostream>
-#include <string.h>
-#include <cstring>
-#include <chrono>
-#include <sys/time.h>
-#include <ctime>
-#include <math.h>
 
 namespace gr {
   namespace ampkey {
@@ -50,7 +41,6 @@ namespace gr {
       : gr::block("samp_delay",
               gr::io_signature::make(1, -1, itemsize),	// 1 min, -1 (infinite) max, itemsize is # ports
               gr::io_signature::make(1, -1, itemsize)),	// 1 min, -1 (infinite) max, itemsize is # ports
-              // must have all arguments here
               d_pre_tx(pre_tx),
               d_samp_rate(samp_rate),
               d_itemsize(itemsize)
@@ -91,7 +81,7 @@ namespace gr {
     }
     
     // this is the clock
-    // a continuously running function that runs until current_millis reaches target_millis
+    // continuously running function that determines if all of the samples of a packet have been received
     void samp_delay_impl::run()
     {
     	while (!d_finished) {
@@ -102,17 +92,16 @@ namespace gr {
         	if (d_finished) {
     			return;
         	}
+        	
         	// main clock loop
-        	// starts clock when target_millis > current_millis
+        	// starts clock when target_millis is set larger than current_millis
         	if(target_millis > current_millis){
         		// update current_millis
     	    		current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    		
     	    		// clock ends when current_millis reaches target_millis
     	    		if(target_millis <= current_millis){
-    				// resets count_actual_samples/transmit_state/d_delta
-    				// d_delta reset so delay samples will be inserted at beginning of next set of samples
-    				// (which is a pdu converted to tagged stream)
-    				transmit_state = true;
+    				// reset d_delta so delay samples will be inserted at beginning of next packets samples
     				d_delta = pre_tx_samp;
     			}
 		}
@@ -147,51 +136,53 @@ namespace gr {
     }
     
     // runs when samples are received
-    // adds delay samples (inserts 0's) to data stream before each set of samples (which is a pdu converted to tagged stream)
-    // that are passed through this block
+    // adds delay samples (inserts 0's) to data stream before each set of samples that are passed through this block
     int samp_delay_impl::general_work (int noutput_items,
                        gr_vector_int &ninput_items,
                        gr_vector_const_void_star &input_items,
                        gr_vector_void_star &output_items)
     {
+    	// setup of variables for scheduler
     	gr::thread::scoped_lock l(d_setlock);
     	assert(input_items.size() == output_items.size());
     	const char* iptr;
     	char* optr;
     	int cons, ret;
+    	
     	// update current_millis when sample is received
     	current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	
     	// set target_millis when sample is received
     	// target_millis is ending_millis added to current_millis
-    	// and is the time when it can be assumed that no more samples will be received
+    	// ending_millis is amount of time after last sample is received before it is determined it was the final sample of a packet
+    	// target time is the time when it can be assumed that the final sample of a packet has been received
     	target_millis = current_millis + ending_millis;
     	
     	// No change in delay; just pass actual samples
-    	if (d_delta == 0) {//runs a few times at start to pad
+    	//runs a few times at flowgraph startup to pad
+    	if (d_delta == 0) {
     		// counts actual # samples received (not delay samples)
     		count_actual_samples += 1;
-    		// makes it so transmit is only set once at proper time stated above
-    		if(transmit_state){
-    			// time when block has finished adding delay samples
-    			// and has begun passing actual data samples (not delay samples)
-            		transmit_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-            		transmit_state = false;
-        	}
+        	
         	// pass actual samples to next block downstream
         	for (size_t i = 0; i < input_items.size(); i++) {
             		iptr = (const char*)input_items[i];
             		optr = (char*)output_items[i];
             		std::memcpy(optr, iptr, noutput_items * d_itemsize);
         	}
+        	
+        	// set variables for scheduler to track samples passed
         	cons = noutput_items;
         	ret = noutput_items;
     	}
 
     	// produce delay samples (insert 0's)
-    	else if (d_delta > 0){ // d_delta > 0
+    	else if (d_delta > 0){
+    		// sets # padding/delay samples based on delay
         	int n_from_input, n_padding;
         	n_from_input = std::max(0, noutput_items - d_delta);
         	n_padding = std::min(d_delta, noutput_items);
+        	
         	// pass delay and then actual samples to next block downstream
         	for (size_t i = 0; i < input_items.size(); i++) {
             		iptr = (const char*)input_items[i];
@@ -199,8 +190,12 @@ namespace gr {
             		std::memset(optr, 0, n_padding * d_itemsize);
             		std::memcpy(optr, iptr, n_from_input * d_itemsize);
         	}
+        	
+        	// set variables for scheduler to track samples passed
         	cons = n_from_input;
         	ret = noutput_items;
+        	
+        	// determines how many of the padding/delay samples have been put into the data stream
         	d_delta -= n_padding;
     	}
     	

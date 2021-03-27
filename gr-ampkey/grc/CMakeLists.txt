@@ -19,6 +19,6 @@
 # Boston, MA 02110-1301, USA.
 install(FILES
     ampkey_samp_delay.block.yml
-    ampkey_keyer.block.yml
-    DESTINATION share/gnuradio/grc/blocks
+    ampkey_updater.block.yml
+    ampkey_amp_ptt.block.yml DESTINATION share/gnuradio/grc/blocks
 )

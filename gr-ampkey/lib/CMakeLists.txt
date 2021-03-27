@@ -24,8 +24,8 @@
 include(GrPlatform) #define LIB_SUFFIX
 list(APPEND ampkey_sources
     samp_delay_impl.cc
-    keyer_impl.cc
-    )
+    updater_impl.cc
+    amp_ptt_impl.cc )
 
 set(ampkey_sources "${ampkey_sources}" PARENT_SCOPE)
 if(NOT ampkey_sources)

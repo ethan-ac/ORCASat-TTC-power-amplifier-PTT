@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2021 gr-ampkey author.
+ * Copyright 2021 ethan.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_AMPKEY_KEYER_H
-#define INCLUDED_AMPKEY_KEYER_H
+#ifndef INCLUDED_AMPKEY_AMP_PTT_H
+#define INCLUDED_AMPKEY_AMP_PTT_H
 
 #include <ampkey/api.h>
 #include <gnuradio/sync_block.h>
@@ -32,24 +32,24 @@ namespace gr {
      * \ingroup ampkey
      *
      */
-    class AMPKEY_API keyer : virtual public gr::sync_block
+    class AMPKEY_API amp_ptt : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<keyer> sptr;
+      typedef boost::shared_ptr<amp_ptt> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of ampkey::keyer.
+       * \brief Return a shared_ptr to a new instance of ampkey::amp_ptt.
        *
-       * To avoid accidental use of raw pointers, ampkey::keyer's
+       * To avoid accidental use of raw pointers, ampkey::amp_ptt's
        * constructor is in a private implementation
-       * class. ampkey::keyer::make is the public interface for
+       * class. ampkey::amp_ptt::make is the public interface for
        * creating new instances.
        */
-      static sptr make(size_t itemsize, int pre_tx, int post_tx);
+      static sptr make(size_t itemsize, int pre_tx, int post_tx, std::string file);
     };
 
   } // namespace ampkey
 } // namespace gr
 
-#endif /* INCLUDED_AMPKEY_KEYER_H */
+#endif /* INCLUDED_AMPKEY_AMP_PTT_H */
 

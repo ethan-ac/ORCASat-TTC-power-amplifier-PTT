@@ -5,13 +5,12 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: ''
-    description: This block flips the state of RTS# pin of a USB/serial converter
-      before, during, and after the Tx USRP transmits.
+    description: ''
     gen_cmake: 'On'
     gen_linking: dynamic
-    generate_options: hb
+    generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: amp_key
+    id: ptt_hier
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,13 +21,13 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Amp Key
-    window_size: ''
+    title: Amplifier PTT
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [7, 7]
+    coordinate: [8, 12.0]
     rotation: 0
     state: enabled
 
@@ -48,7 +47,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [377, 330]
+    coordinate: [544, 348.0]
     rotation: 0
     state: enabled
 - name: ampkey_samp_delay_0
@@ -68,9 +67,43 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [377, 401]
+    coordinate: [544, 412.0]
     rotation: 0
     state: enabled
+- name: blocks_mute_xx_0
+  id: blocks_mute_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mute: mute
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 408.0]
+    rotation: 0
+    state: enabled
+- name: mute
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Mute
+    short_id: ''
+    type: ''
+    value: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 12.0]
+    rotation: 0
+    state: true
 - name: pad_sink_0
   id: pad_sink
   parameters:
@@ -86,7 +119,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [604, 409]
+    coordinate: [768, 420.0]
     rotation: 0
     state: true
 - name: pad_source_0
@@ -106,7 +139,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [196, 409]
+    coordinate: [160, 404.0]
     rotation: 0
     state: true
 - name: post_tx
@@ -123,7 +156,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [343, 8]
+    coordinate: [416, 12.0]
     rotation: 0
     state: true
 - name: pre_tx
@@ -140,7 +173,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [191, 8]
+    coordinate: [272, 12.0]
     rotation: 0
     state: true
 - name: samp_rate_usrp
@@ -157,14 +190,15 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [495, 8]
+    coordinate: [576, 12.0]
     rotation: 0
     state: true
 
 connections:
 - [ampkey_samp_delay_0, '0', pad_sink_0, '0']
-- [pad_source_0, '0', ampkey_keyer_0, '0']
-- [pad_source_0, '0', ampkey_samp_delay_0, '0']
+- [blocks_mute_xx_0, '0', ampkey_keyer_0, '0']
+- [blocks_mute_xx_0, '0', ampkey_samp_delay_0, '0']
+- [pad_source_0, '0', blocks_mute_xx_0, '0']
 
 metadata:
   file_format: 1

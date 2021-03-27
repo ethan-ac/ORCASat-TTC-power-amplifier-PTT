@@ -4,11 +4,15 @@ category: '[ampkey]'
 
 templates:
   imports: import ampkey
-  # ${type.size}*${vlen} replaces ${itemsize} to allow for selecting input data type/# inputs/outputs
+  # ${type.size}*${vlen} allows for selecting input data type/# inputs/outputs
   make: ampkey.samp_delay(${type.size}*${vlen}, ${pre_tx}, ${samp_rate})
 
 
-# declareable variables for this block in the flowgraph
+#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
+#     Keys include:
+#     * id (makes the value accessible as \$keyname, e.g. in the make entry)
+#     * label (label shown in the GUI)
+#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 parameters:
 # allows selection of input/output data type
 - id: type
@@ -42,14 +46,21 @@ parameters:
   dtype: int
   default: 2000000
 
-# ports for this block
+
+#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
+#  Keys include:
+#      * label (an identifier for the GUI)
+#      * domain (optional - stream or message. Default is stream)
+#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
+#      * vlen (optional - data stream vector length. Default is 1)
+#      * optional (optional - set to 1 for optional inputs. Default is 0)
 # input that has selectible type and # inputs
 inputs:
 -   domain: stream
     dtype: ${ type }
     vlen: ${ vlen }
     multiplicity: ${ num_ports }
-#   output that has selectible type and # outputs
+# output that has selectible type and # outputs
 outputs:
 -   domain: stream
     dtype: ${ type }
@@ -59,7 +70,7 @@ outputs:
 
 # summary of this blocks purpose that will appear in the documentation tab of its properties
 documentation: |-
-    This block delays the data stream by a number of samples (based on the desired time delay in milliseconds and the samples per second of the flowgraph). It will also determine the amount of time the packet will take the transmit and send that value to the keyer block.
+    This block delays every set of samples in the data stream by a number of samples.
 
 # dont allow there to be < 1 ports, so minimum # inputs/outputs is 1
 asserts:

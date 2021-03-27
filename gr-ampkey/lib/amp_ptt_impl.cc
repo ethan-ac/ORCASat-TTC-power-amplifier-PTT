@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2021 gr-ampkey author.
+ * Copyright 2021 ethan.
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,65 +23,49 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include "keyer_impl.h"
-// includes for clock
-#include <chrono>
-#include <iostream>
-#include <sys/time.h>
-#include <ctime>
-#include <vector>
-// includes for usb/serial converter
-#include <stdio.h>      // standard input / output functions
-#include <stdlib.h>
-#include <string.h>     // string function definitions
-#include <unistd.h>     // UNIX standard function definitions
-#include <fcntl.h>      // File control definitions
-#include <errno.h>      // Error number definitions
-#include <termios.h>    // POSIX terminal control definitions
-#include <math.h>
+#include "amp_ptt_impl.h"
 
 namespace gr {
   namespace ampkey {
 
-    keyer::sptr keyer::make(size_t itemsize, int pre_tx, int post_tx)
+    amp_ptt::sptr amp_ptt::make(size_t itemsize, int pre_tx, int post_tx, std::string file)
     {
-      return gnuradio::get_initial_sptr (new keyer_impl(itemsize, pre_tx, post_tx));
+      return gnuradio::get_initial_sptr (new amp_ptt_impl(itemsize, pre_tx, post_tx, file));
     }
 
 
     /*
      * The private constructor
      */
-    keyer_impl::keyer_impl(size_t itemsize, int pre_tx, int post_tx)
-      : gr::sync_block("keyer",
+    amp_ptt_impl::amp_ptt_impl(size_t itemsize, int pre_tx, int post_tx, std::string file)
+      : gr::sync_block("amp_ptt",
               gr::io_signature::make(1, -1, itemsize),	// 1 min, -1 (infinite) max, itemsize is # ports
-              gr::io_signature::make(0, 0, 0)),	// no outputs
+              gr::io_signature::make(0, 0, 0)),		// no outputs
               d_finished(false),
-              // must have all arguments here
               d_pre_tx(pre_tx),
               d_post_tx(post_tx),
-              d_itemsize(itemsize)
-    {
-    }
+              d_itemsize(itemsize),
+              d_file(file)
+    {}
 
     /*
      * Our virtual destructor.
      */
-    keyer_impl::~keyer_impl()
+    amp_ptt_impl::~amp_ptt_impl()
     {
     }
-
+    
     // starts continuously running function that is used for clock
-    bool keyer_impl::start()
+    bool amp_ptt_impl::start()
     {
     	d_finished = false;
-    	d_thread = gr::thread::thread(std::bind(&keyer_impl::run, this));
+    	d_thread = gr::thread::thread(std::bind(&amp_ptt_impl::run, this));
 	
     	return block::start();
     }
     
     // stops continuously running function
-    bool keyer_impl::stop()
+    bool amp_ptt_impl::stop()
     {
     	// Shut down the thread
     	d_finished = true;
@@ -92,8 +76,8 @@ namespace gr {
     }
     
     // this is the clock
-    // a continuously running function that runs until all current_millis have reached their target_millis
-    void keyer_impl::run()
+    // continuously running function that keeps rts# pin of usb/serial cable toggled for a length of time
+    void amp_ptt_impl::run()
     {
     	// static_cast<long>(#) sets how often the clock updates in milliseconds
     	// ie #=1 the function runs every millisecond
@@ -105,23 +89,32 @@ namespace gr {
         	}
         	
         	// d_pre_tx clock
+        	// starts when pre_target_millis is set larger than pre_current_millis and when enabled by the block receiving a sample
         	// runs for duration of d_pre_tx and amp_tx milliseconds
         	// then starts d_post_tx clock
         	if(pre_target_millis > pre_current_millis && d_pre_tx_state){
       			// update pre_current_millis
     	    		pre_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    		
     	    		// to prevent open() from being called continuously when clock is running
     	    		if(USB_state){
-    	    			// toggles rts# pin on of usb/serial by opening file for that usb/serial device
-    	        		USB = open("/dev/ttyUSB0", O_RDWR| O_NOCTTY);
+    	    			// convert from std::string to char
+    	    			char d_file_char[d_file.size()+1];
+    	    			strcpy(d_file_char, d_file.c_str());
+    	    			
+    	    			// toggles rts# pin on of usb/serial cable by opening file location for that usb/serial cable
+    	        		USB = open(d_file_char, O_RDWR| O_NOCTTY);
     	        		USB_state = false;
     	    		}
+    	    		
     	    		// d_pre_tx clock ends when pre_current_millis reaches pre_target_millis
     	    		if(pre_target_millis <= pre_current_millis){
     	    			// updates post_current_millis to current time
     	    			post_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    			
     	    			// set post_target_millis to be time when ptt can untoggle
     	    			post_target_millis = post_current_millis + d_post_tx;
+    	    			
     	    			// stops d_pre_tx clock and starts d_post_tx clock
     	    			d_pre_tx_state = false;
     	    			d_post_tx_state = true;
@@ -129,18 +122,20 @@ namespace gr {
     	    		}
         	}
         	
-        	// d_post_tx clock
+        	// d_post_tx clock for next time a set of samples is received
+        	// starts when post_target_millis is set larger than post_current_millis and when enabled by d_pre_tx clock ends
         	// runs for duration of d_post_tx milliseconds
-        	// then resets all clocks
+        	// then resets clocks
         	if(post_target_millis > post_current_millis && d_post_tx_state){
       			// update post_current_millis
     	    		post_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    		
     	    		// d_post_tx clock ends when post_current_millis reaches post_target_millis
     	    		if(post_target_millis <= post_current_millis){
-    	    			// toggles rts# pin off of usb/serial by closing file for that usb/serial device
+    	    			// toggles rts# pin off of usb/serial cable by closing file location for that usb/serial cable
     	        		close(USB);
-    	        		// reset USB_state/state/d_pre_tx_state/d_post_tx_state
-    	        		// for next time a set of samples (which is a pdu converted to a tagged stream) is received
+    	        		
+    	        		// reset USB_state/state/d_pre_tx_state/d_post_tx_state for next time a set of samples is received
     	        		USB_state = true;
     	        		state = true;
     	        		d_pre_tx_state = true;
@@ -150,39 +145,45 @@ namespace gr {
     	}
     }
     
-    // runs whenever sample is received
-    // pre_current_millis is updated and pre_target_millis is set here when first sample is received
-    int keyer_impl::work(int noutput_items,
+    // run whenever sample is received
+    // d_pre_tx clock starts when first sample is received
+    int
+    amp_ptt_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
+    	// get value of "packet_len" tag which is total length of a packet
+    	// "packet_len" is default tag name of "PDU to Tagged Stream" block
+    	// used to determine duration of amp_tx time by putting value into line equation
     	uint64_t abs_N, end_N;
         for (size_t i = 0; i < input_items.size(); i++) {
         	abs_N = nitems_read(i);
         	end_N = abs_N + (uint64_t)(noutput_items);
-        	get_tags_in_range(d_work_tags, i, abs_N, end_N);
+        	get_tags_in_range(d_work_tags, i, abs_N, end_N, pmt::intern("packet_len"));
         	for (const auto& tag : d_work_tags) {
 			d_tag_value = pmt::to_long(tag.value);
 		}
         }
     	
-    	// makes it so pre_target_millis is only set by first sample
+    	// make it so pre_target_millis is only set by first sample
     	if(state){
     		// updates pre_current_millis to current time
     		pre_current_millis = 		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    		// calculated by putting total packet length into line equation
+    		
+    		// calculated by putting total length of a packet into line equation
     		int amp_tx = ceil((d_tag_value * 0.83) + 4);
+    		
     		// set pre_target_millis when a sample is received to allow d_pre_tx clock to start
     		// pre_current_millis is current time
-    		// d_pre_tx is ptt toggle time before tx
+    		// d_pre_tx is ptt amp toggle time before tx
     		// amp_tx is ptt toggle time during tx
-    		// OFFSET is to compensate for inherent shortening of ptt period by usb/serial cable
-    		pre_target_millis = pre_current_millis + d_pre_tx + amp_tx + OFFSET;
+    		// PTT_OFFSET is to compensate for inherent shortening of ptt period by usb/serial cable
+    		pre_target_millis = pre_current_millis + d_pre_tx + amp_tx + PTT_OFFSET;
     		state = false;
     	}
     	
     	// standard for any stream block
-    	// can be any value since this block is a sink and doesn't output any samples
+    	// tells scheduler how many samples have passed
     	return noutput_items;
     }
 
