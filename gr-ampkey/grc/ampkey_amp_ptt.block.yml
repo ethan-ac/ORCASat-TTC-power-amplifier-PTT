@@ -47,7 +47,7 @@ parameters:
   default: 50
 # location of file that controls USB/serial cable
 - id: file
-  label: USB/serial cable file
+  label: USB/serial Cable File Location
   dtype: string
   default: /dev/ptt
 
