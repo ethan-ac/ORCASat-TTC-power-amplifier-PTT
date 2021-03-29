@@ -111,10 +111,10 @@ Plug the USB/serial cable into the computer being used. Connect the probes of th
 
 ![](/images/ampkey_hier_block.png)
 
-The "Amp Key" hier block how it should be connected to the flowgraph.
+How the "Power Amplifier PTT" hier block should be connected to the flowgraph.
 
 ![](/images/flowgraph_ampkey_hier_block.png)
 
-Viewing inside the "Amp Key" hier block.
+Viewing the flowgraph of the "Power Amplifier PTT" hier block.
 
 <div align="center">
