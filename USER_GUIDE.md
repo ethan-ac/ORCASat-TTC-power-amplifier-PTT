@@ -64,7 +64,7 @@ Additional resource on how to set a static device name [here](https://unix.stack
 
 ### Out-of-Tree (OOT) Modules
 
-Install commands for the OOT module gr-ampkey. If you make changes to the OOT modules make sure you delete the ~/build directory before pushing to this repository. This is because that directory is specific to your computer and the OOT module building process won't work on another persons computer if they are using the ~/build directory from another computer.
+Install commands for the OOT module gr-ampkey. The OOT module is in a directory denoted by the prefix "gr-". If you make changes to the OOT modules make sure you delete the ~/build directory before pushing to this repository. This is because that directory is specific to your computer and the OOT module building process won't work on another persons computer if they are using the ~/build directory from another computer.
 
 Install power amplifier PTT OOT module
 ```
