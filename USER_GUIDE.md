@@ -72,25 +72,26 @@ $ git clone https://gitlab.com/ORCASat/ttc/power-amplifier-ptt.git
 ```
 Each OOT module must be installed into GNU Radio. They must also be updated if any edits are made to them. These are both done from a command terminal located at the desired OOT module's directory. After editing or updating an OOT module, GRC must be restarted to apply the changes that were made.
 
-Both the installing and updating can be done by a custom shell script using the following commands in ~/power-amplifier-ptt/gr-ampkey.
+Install/Update gr-ampkey for GNU Radio
 ```
-$ ./build.sh
+cd power-amplifier-ptt/gr-ampkey
+./build.sh
 ```
 Installing the OOT module can be done manually using the following commands in the ~/power-amplifier-ptt/gr-ampkey directory.
 ```
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-$ sudo make install
-$ sudo ldconfig
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+sudo ldconfig
 ```
 Updating the OOT module can be done manually using the following commands in the ~/power-amplifier-ptt/gr-ampkey/build directory.
 ```
-$ cmake ..
-$ make
-$ sudo make install
-$ sudo ldconfig
+cmake ..
+make
+sudo make install
+sudo ldconfig
 ```
 
 ### Hier blocks
