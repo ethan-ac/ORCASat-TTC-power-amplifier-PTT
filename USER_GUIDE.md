@@ -31,18 +31,22 @@ These are links to all of the necessary programs and resources for the power amp
 
 Allow USB/serial cable file in Linux to be accessed without admin permissions.
 ```
-$ sudo usermod -a -G dialout $USER
+sudo usermod -a -G dialout $USER
 ```
 
 Bind USB/serial cable to a static name. This is done since USB/serial cables are given a name, such as "ttyUSB0", when plugged in which is not reserved to that device so a static name must be implemented manually.
 
-Find which "ttyUSBx" file the USB/serial cable is using, it will be the red text. If there are multiple results pick the one that is for the correct device.
+<div align="center">
+
+![](/images/cable_ids.png)
+
+Where the idVendor and idProduct are located in the "lsusb" command output.
+
+<div align="left">
+
+Find the idVendor and idProducts of the USB/serial cable being used, idVendor is number left of colon after "ID", idProduct is number right of colon after "ID"
 ```
-dmesg | grep ttyUSB
-```
-Find the idVendor and idProducts of the USB/serial cable, look for the paragraph with the proper manufacturer for the USB/serial cable you are using
-```
-udevadm info --name=/dev/ttyUSBx --attribute-walk
+lsusb
 ```
 Create a file to store your static device name
 ```
@@ -52,7 +56,7 @@ Edit the file that was created, any text editor can be used
 ```
 sudo vi /etc/udev/rules.d/99-usb-serial.rules
 ```
-Press "i" to enter insert mode in Vim then paste in the following data, substituting the proper idVendor and idProduct. The SYMLINK will be the static name of the device, the default name is the default name used by the "Power Amplifier PTT" hier block
+Press "i" to enter insert mode in Vim then right click > paste in the following data, substituting the proper idVendor and idProduct (HIGHLY recommended the substitution is not done in Vim because Vim is a pain). The SYMLINK will be the static name of the device, the default name is the default name used by the "Power Amplifier PTT" hier block.
 ```
 SUBSYSTEM=="tty", ATTRS{idVendor}=="xxxx", ATTRS{idProduct}=="xxxx", SYMLINK+="ptt"
 ```
@@ -60,7 +64,29 @@ Press "Esc" to exit insert mode. Press ":wq" then press "Enter" to save and exit
 
 Additional resource on how to set a static device name [here](https://unix.stackexchange.com/questions/66901/how-to-bind-usb-device-under-a-static-name) at the second answer.
 
-(OPTIONAL) If there is a Vagrant VM from the Transceiver POC Firmware repository running, it may accidentally take the USB/serial cable being used for power amplifier PTT. This can be fixed by adding vendorid and productid tags for the USB/serial cable being used for Uart communication in the Vagrantfile.
+(OPTIONAL) If there is a Vagrant VM from the Transceiver POC Firmware repository running, it may accidentally take the USB/serial cable being used for power amplifier PTT. This can be fixed by adding vendorid and productid tags for the USB/serial cable being used for UART communication in the Vagrantfile.
+
+Find the vendorid and productid of the USB/serial cable being used. This is the same as finding the idVendor and idProduct.
+```
+lsusb
+```
+Open ~/tranceiver-poc-firmware/Vagrantfile. Replace the last block of code before the "end"s, which is the USB/serial cable filter, substituting the "#"s for the vendorid and productid of the USB/serial cable found in the previous step.
+```
+# Add USB device filter to VM to capture USB/serial cable
+    vb.customize ["usbfilter", "add", "0",
+      "--target", :id,
+      "--name", "TTL232R-3V3",
+      "--vendorid", "0x####",
+      "--productid", "0x####"]
+```
+If "vagrant up" has already been run, open the VirtualBox application to the Vagrant VM and go Settings > USB > click "Remove selected USB filter" (USB port with red X) repeatedly until all USB filters have been removed, then exit by pressing "OK".
+
+Apply the new USB device filter
+```
+vagrant up
+or
+vagrant reload
+```
 
 ### Out-of-Tree (OOT) Modules
 
@@ -68,7 +94,7 @@ Install commands for the OOT module gr-ampkey. The OOT module is in a directory 
 
 Install power amplifier PTT OOT module
 ```
-$ git clone https://gitlab.com/ORCASat/ttc/power-amplifier-ptt.git
+git clone https://gitlab.com/ORCASat/ttc/power-amplifier-ptt.git
 ```
 Each OOT module must be installed into GNU Radio. They must also be updated if any edits are made to them. These are both done from a command terminal located at the desired OOT module's directory. After editing or updating an OOT module, GRC must be restarted to apply the changes that were made.
 
@@ -118,4 +144,4 @@ How the "Power Amplifier PTT" hier block should be connected to the flowgraph.
 
 Viewing the flowgraph of the "Power Amplifier PTT" hier block.
 
-<div align="center">
+<div align="left">
