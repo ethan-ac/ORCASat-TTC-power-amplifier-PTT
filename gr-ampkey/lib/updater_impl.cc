@@ -28,11 +28,9 @@
 namespace gr {
   namespace ampkey {
 
-    updater::sptr
-    updater::make(bool state)
+    updater::sptr updater::make(bool state)
     {
-      return gnuradio::get_initial_sptr
-        (new updater_impl(state));
+      return gnuradio::get_initial_sptr (new updater_impl(state));
     }
 
 

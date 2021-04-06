@@ -5,10 +5,12 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: ''
-    description: ''
+    description: This block toggles the RTS# pin of a USB/serial cable (cable_file)
+      when samples pass it (amp_tx) and for a predetermined duration before (pre_tx)
+      and after (post_tx) the samples pass
     gen_cmake: 'On'
     gen_linking: dynamic
-    generate_options: qt_gui
+    generate_options: hb
     hier_block_src_path: '.:'
     id: ptt_hier
     max_nouts: '0'
@@ -21,7 +23,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Amplifier PTT
+    title: Power Amplifier PTT
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -32,12 +34,13 @@ options:
     state: enabled
 
 blocks:
-- name: ampkey_keyer_0
-  id: ampkey_keyer
+- name: ampkey_amp_ptt_0
+  id: ampkey_amp_ptt
   parameters:
     affinity: ''
     alias: ''
     comment: ''
+    file: cable_file
     num_ports: '1'
     post_tx: post_tx
     pre_tx: pre_tx
@@ -47,9 +50,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 348.0]
+    coordinate: [328, 212.0]
     rotation: 0
-    state: enabled
+    state: true
 - name: ampkey_samp_delay_0
   id: ampkey_samp_delay
   parameters:
@@ -67,41 +70,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 412.0]
+    coordinate: [328, 292.0]
     rotation: 0
     state: enabled
-- name: blocks_mute_xx_0
-  id: blocks_mute_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mute: mute
-    type: complex
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [368, 408.0]
-    rotation: 0
-    state: enabled
-- name: mute
+- name: cable_file
   id: parameter
   parameters:
     alias: ''
     comment: ''
     hide: none
-    label: Mute
+    label: USB/serial Cable File
     short_id: ''
-    type: ''
-    value: 'False'
+    type: str
+    value: /dev/ptt
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [176, 12.0]
+    coordinate: [496, 12.0]
     rotation: 0
     state: true
 - name: pad_sink_0
@@ -119,7 +105,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 420.0]
+    coordinate: [552, 300.0]
     rotation: 0
     state: true
 - name: pad_source_0
@@ -139,7 +125,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [160, 404.0]
+    coordinate: [152, 300.0]
     rotation: 0
     state: true
 - name: post_tx
@@ -156,7 +142,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 12.0]
+    coordinate: [344, 12.0]
     rotation: 0
     state: true
 - name: pre_tx
@@ -173,7 +159,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 12.0]
+    coordinate: [192, 12.0]
     rotation: 0
     state: true
 - name: samp_rate_usrp
@@ -190,15 +176,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 12.0]
+    coordinate: [648, 12.0]
     rotation: 0
     state: true
 
 connections:
 - [ampkey_samp_delay_0, '0', pad_sink_0, '0']
-- [blocks_mute_xx_0, '0', ampkey_keyer_0, '0']
-- [blocks_mute_xx_0, '0', ampkey_samp_delay_0, '0']
-- [pad_source_0, '0', blocks_mute_xx_0, '0']
+- [pad_source_0, '0', ampkey_amp_ptt_0, '0']
+- [pad_source_0, '0', ampkey_samp_delay_0, '0']
 
 metadata:
   file_format: 1
