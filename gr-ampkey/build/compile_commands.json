@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/ethan/gr-ampkey/build/lib",
+  "command": "/usr/bin/c++  -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DGR_CTRLPORT -Dgnuradio_ampkey_EXPORTS -I/home/ethan/gr-ampkey/lib/../include  -O3 -DNDEBUG -fPIC   -fvisibility=hidden -std=gnu++11 -o CMakeFiles/gnuradio-ampkey.dir/samp_delay_impl.cc.o -c /home/ethan/gr-ampkey/lib/samp_delay_impl.cc",
+  "file": "/home/ethan/gr-ampkey/lib/samp_delay_impl.cc"
+},
+{
+  "directory": "/home/ethan/gr-ampkey/build/lib",
+  "command": "/usr/bin/c++  -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DGR_CTRLPORT -Dgnuradio_ampkey_EXPORTS -I/home/ethan/gr-ampkey/lib/../include  -O3 -DNDEBUG -fPIC   -fvisibility=hidden -std=gnu++11 -o CMakeFiles/gnuradio-ampkey.dir/updater_impl.cc.o -c /home/ethan/gr-ampkey/lib/updater_impl.cc",
+  "file": "/home/ethan/gr-ampkey/lib/updater_impl.cc"
+},
+{
+  "directory": "/home/ethan/gr-ampkey/build/lib",
+  "command": "/usr/bin/c++  -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DGR_CTRLPORT -Dgnuradio_ampkey_EXPORTS -I/home/ethan/gr-ampkey/lib/../include  -O3 -DNDEBUG -fPIC   -fvisibility=hidden -std=gnu++11 -o CMakeFiles/gnuradio-ampkey.dir/amp_ptt_impl.cc.o -c /home/ethan/gr-ampkey/lib/amp_ptt_impl.cc",
+  "file": "/home/ethan/gr-ampkey/lib/amp_ptt_impl.cc"
+},
+{
+  "directory": "/home/ethan/gr-ampkey/build/swig",
+  "command": "/usr/bin/c++  -DBOOST_ALL_NO_LIB -DBOOST_ATOMIC_DYN_LINK -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -DBOOST_THREAD_DYN_LINK -DGR_CTRLPORT -Dampkey_swig_EXPORTS -I/home/ethan/gr-ampkey/build/swig -I/home/ethan/gr-ampkey/swig -I/usr/local/include/gnuradio/swig -I/home/ethan/gr-ampkey/lib/../include -isystem /usr/include/python3.8  -O3 -DNDEBUG -fPIC   -fvisibility=hidden -std=gnu++11 -o CMakeFiles/ampkey_swig.dir/CMakeFiles/ampkey_swig.dir/ampkey_swigPYTHON_wrap.cxx.o -c /home/ethan/gr-ampkey/build/swig/CMakeFiles/ampkey_swig.dir/ampkey_swigPYTHON_wrap.cxx",
+  "file": "/home/ethan/gr-ampkey/build/swig/CMakeFiles/ampkey_swig.dir/ampkey_swigPYTHON_wrap.cxx"
+},
+{
+  "directory": "/home/ethan/gr-ampkey/build/swig",
+  "command": "/usr/bin/c++    -O3 -DNDEBUG   -fvisibility=hidden -std=gnu++11 -o CMakeFiles/_ampkey_swig_doc_tag.dir/_ampkey_swig_doc_tag.cpp.o -c /home/ethan/gr-ampkey/build/swig/_ampkey_swig_doc_tag.cpp",
+  "file": "/home/ethan/gr-ampkey/build/swig/_ampkey_swig_doc_tag.cpp"
+}
+]

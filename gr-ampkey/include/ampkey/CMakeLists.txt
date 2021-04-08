@@ -24,6 +24,5 @@
 install(FILES
     api.h
     samp_delay.h
-    updater.h
     amp_ptt.h DESTINATION include/ampkey
 )

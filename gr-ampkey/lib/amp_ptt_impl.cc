@@ -88,6 +88,8 @@ namespace gr {
             		return;
         	}
         	
+        	
+        	
         	// d_pre_tx clock
         	// starts when pre_target_millis is set larger than pre_current_millis and when enabled by the block receiving a sample
         	// runs for duration of d_pre_tx and amp_tx milliseconds
@@ -105,7 +107,20 @@ namespace gr {
     	    			// toggles rts# pin on of usb/serial cable by opening file location for that usb/serial cable
     	        		USB = open(d_file_char, O_RDWR| O_NOCTTY);
     	        		USB_state = false;
+    	        		
+    	        		// error check if the USB/serial cable file is a valid location
+    	        		if (USB < 0) {
+    	        			std::cout << "===================================" << std::endl;
+    					std::cout << "ERROR Power Amplifier PTT: USB/serial cable file is not a valid file path" << std::endl;
+    					std::cout << "===================================" << std::endl;
+    	        		}
     	    		}
+    	    		
+    	    		// when data is received from a unmodulated carrier and samples have stopped coming in to samp_delay
+    	    		if (!d_is_packet && !samples_incoming) {
+    	    			// exits the d_pre_tx clock
+      				pre_target_millis = pre_current_millis;
+        		}
     	    		
     	    		// d_pre_tx clock ends when pre_current_millis reaches pre_target_millis
     	    		if(pre_target_millis <= pre_current_millis){
@@ -118,7 +133,6 @@ namespace gr {
     	    			// stops d_pre_tx clock and starts d_post_tx clock
     	    			d_pre_tx_state = false;
     	    			d_post_tx_state = true;
-    	    			
     	    		}
         	}
         	
@@ -130,15 +144,26 @@ namespace gr {
       			// update post_current_millis
     	    		post_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     	    		
+    	    		// sometimes samples_incoming will flip to false while samples are still incoming for samp_delay
+    	    		// this is a check to make sure samples are actually not incoming for samp_delay
+    	    		if (samples_incoming) {
+    	    			// turn of d_post_tx clock and turn on d_pre_tx clock
+    	    			d_pre_tx_state = true;
+    	    			d_post_tx_state = false;
+    	    			
+    	    			// update pre_current_millis
+    	    			pre_current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    	    			// reset pre_target_millis to be massive
+    	    			pre_target_millis = pre_current_millis + amp_tx;
+    	    		}
     	    		// d_post_tx clock ends when post_current_millis reaches post_target_millis
-    	    		if(post_target_millis <= post_current_millis){
+    	    		else if (post_target_millis <= post_current_millis) {
     	    			// toggles rts# pin off of usb/serial cable by closing file location for that usb/serial cable
     	        		close(USB);
     	        		
     	        		// reset USB_state/state/d_pre_tx_state/d_post_tx_state for next time a set of samples is received
     	        		USB_state = true;
     	        		state = true;
-    	        		d_pre_tx_state = true;
     	        		d_post_tx_state = false;
     	    		}
         	}
@@ -171,7 +196,14 @@ namespace gr {
     		pre_current_millis = 		std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     		
     		// calculated by putting total length of a packet into line equation
-    		int amp_tx = ceil((d_tag_value * 0.83) + 4);
+    		amp_tx = ceil((d_tag_value * 0.83) + 4);
+    		
+    		// whether the samples received are from a packet or a unmodulated carrier
+    		if (d_tag_value > 999) {
+    			d_is_packet = false;
+    		} else {
+    			d_is_packet = true;
+    		}
     		
     		// set pre_target_millis when a sample is received to allow d_pre_tx clock to start
     		// pre_current_millis is current time
@@ -179,9 +211,10 @@ namespace gr {
     		// amp_tx is ptt toggle time during tx
     		// PTT_OFFSET is to compensate for inherent shortening of ptt period by usb/serial cable
     		pre_target_millis = pre_current_millis + d_pre_tx + amp_tx + PTT_OFFSET;
+    		d_pre_tx_state = true;
     		state = false;
     	}
-    	
+
     	// standard for any stream block
     	// tells scheduler how many samples have passed
     	return noutput_items;

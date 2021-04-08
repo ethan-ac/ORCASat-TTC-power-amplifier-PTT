@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ethan/gr-ampkey/swig/ampkey_swig.i
+gnuradio.i
+/home/ethan/gr-ampkey/swig/gnuradio.i
+ampkey_swig_doc.i
+/home/ethan/gr-ampkey/swig/ampkey_swig_doc.i
+ampkey/samp_delay.h
+/home/ethan/gr-ampkey/swig/ampkey/samp_delay.h
+ampkey/updater.h
+/home/ethan/gr-ampkey/swig/ampkey/updater.h
+ampkey/amp_ptt.h
+/home/ethan/gr-ampkey/swig/ampkey/amp_ptt.h
+ampkey/samp_delay.h
+/home/ethan/gr-ampkey/swig/ampkey/samp_delay.h
+ampkey/updater.h
+/home/ethan/gr-ampkey/swig/ampkey/updater.h
+ampkey/amp_ptt.h
+/home/ethan/gr-ampkey/swig/ampkey/amp_ptt.h
+

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.17">
+  <compound refid="classgr_1_1ampkey_1_1keyer" kind="class"><name>gr::ampkey::keyer</name>
+    <member refid="classgr_1_1ampkey_1_1keyer_1af2a12c55a41e4104aa2695c234cc27f6" kind="typedef"><name>sptr</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer_1aa1da97556925576900446d5193782230" kind="function"><name>make</name></member>
+  </compound>
+  <compound refid="classgr_1_1ampkey_1_1keyer__impl" kind="class"><name>gr::ampkey::keyer_impl</name>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a770bd90aaa56fe210445ae74c0055b4f" kind="variable"><name>d_thread</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1af2012f79df3261e741fb5b9235518fc9" kind="variable"><name>d_finished</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1aa921c9042ee72f7848e6d76bea38db7b" kind="variable"><name>d_itemsize</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a1c7b8a1ac4b6fe9aee251942f1a5747a" kind="variable"><name>d_pre_tx</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a8ba628eab9768442a71869681e3402a3" kind="variable"><name>d_post_tx</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1af95ca6372907c2ca95bf2befefb009bc" kind="variable"><name>USB</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a634437c9bc5ec10d83c9ec44446dec2e" kind="variable"><name>pre_current_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a065fc5cb05696b71080d52f815f181af" kind="variable"><name>pre_target_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a0c439813520b849b23bc68f3293a95db" kind="variable"><name>mid_current_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1ab0493bb8342d4d2ff28c7ad6df2d342a" kind="variable"><name>mid_target_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1abe0ea4ae37c438a561d29c4c9855813f" kind="variable"><name>post_current_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1ab7f054354afb17ccf594e237cda78bb1" kind="variable"><name>post_target_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1ae38fdfe5ffc819e42ad9775b563785f1" kind="variable"><name>USB_state</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a330abd8af8b570dcaf8c95d1926bf57b" kind="variable"><name>state</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1afbccf954f6aeac4b42a5a3d6b1dfeb8c" kind="variable"><name>d_pre_tx_state</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a7c30605c71def95932322083a28b0224" kind="variable"><name>amp_tx_state</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a3840048d401898ae7efbdc46f1fbbad2" kind="variable"><name>d_post_tx_state</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1add0a5b0a5176b39a092f9f0e27ca526c" kind="function"><name>keyer_impl</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a6a38e4c90abdf5277d66a5b3bcde8bf3" kind="function"><name>~keyer_impl</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a39459407bfde94520e8eb802626bbdbb" kind="function"><name>run</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1a3b290794650ae63f7391a31c709c094a" kind="function"><name>start</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1ab22f0303e805b482448323f5bfcbb8ed" kind="function"><name>stop</name></member>
+    <member refid="classgr_1_1ampkey_1_1keyer__impl_1ab2812bdfad4d0d7b0ac952473d99f3ea" kind="function"><name>work</name></member>
+  </compound>
+  <compound refid="classgr_1_1ampkey_1_1samp__delay" kind="class"><name>gr::ampkey::samp_delay</name>
+    <member refid="classgr_1_1ampkey_1_1samp__delay_1ac1dc8fe2bceecde2b6f93535d4bfcb70" kind="typedef"><name>sptr</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay_1ae46a2ef2213d71fbbc6f28b545cab471" kind="function"><name>make</name></member>
+  </compound>
+  <compound refid="classgr_1_1ampkey_1_1samp__delay__impl" kind="class"><name>gr::ampkey::samp_delay_impl</name>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1af3e53bec7cd06b8adc0dba2c3ebd2f7c" kind="variable"><name>d_thread</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a680c512af5d6a7598d0550f591229729" kind="variable"><name>d_finished</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a9af8c3e5e129528c5bfd873bd1c7d042" kind="variable"><name>d_itemsize</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a662d67a6b0fca5935ad6f4c8f02fa7a2" kind="variable"><name>d_pre_tx</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a25c464a96a3e8d1c4e1904dc30dd056b" kind="variable"><name>d_samp_rate</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a08fcc67b9e78737b88a0528ca0583d93" kind="variable"><name>pre_tx_samp</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1ab6abed8515b6f63ab70bd286504ee821" kind="variable"><name>ending_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1ae053e2d656807ef184c86e3b3e7e7b63" kind="variable"><name>d_delta</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a77da9a950be02b062844d4819802a6f4" kind="variable"><name>current_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1aefe501ce012d165bbc0786fe82b5d4c7" kind="variable"><name>target_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1aef36e7e76572bac5277eaa357d9bab0a" kind="variable"><name>transmit_millis</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1abdd7fa616cb6891d00be79d44b0538de" kind="variable"><name>count_actual_samples</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a440b9971f166bedc1d1eee3adf005a2f" kind="variable"><name>transmit_state</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a32a6237042712ab7ea15655f333c3034" kind="variable"><name>init</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a6d57f0559cfece218efd39784508e529" kind="function"><name>samp_delay_impl</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a7253aa377b457dd28a25d2fb55a63d41" kind="function"><name>~samp_delay_impl</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1ac4badc52dcd39f44ba14de16e5c28c32" kind="function"><name>run</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1ada56527138aefb0b4445a7f689b05068" kind="function"><name>start</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a55c643c4708378877ccaf07cd2f38dd0" kind="function"><name>stop</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1adaed4b5165a00ecdb015c5acc709782e" kind="function"><name>dly</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a60bad678de5cea7a06e2541eb6e53b29" kind="function"><name>set_dly</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a6c627b697594d4a627121c751f300648" kind="function"><name>forecast</name></member>
+    <member refid="classgr_1_1ampkey_1_1samp__delay__impl_1a592d2647b7b5e26d3210fb07d431dfc1" kind="function"><name>general_work</name></member>
+  </compound>
+  <compound refid="namespacegr" kind="namespace"><name>gr</name>
+  </compound>
+  <compound refid="namespacegr_1_1ampkey" kind="namespace"><name>gr::ampkey</name>
+    <member refid="namespacegr_1_1ampkey_1ac52ce313a475744168c6ba1ca4495291" kind="variable"><name>amp_tx</name></member>
+  </compound>
+  <compound refid="namespacestd" kind="namespace"><name>std</name>
+  </compound>
+  <compound refid="api_8h" kind="file"><name>api.h</name>
+    <member refid="api_8h_1abaaeaf79a9e1e0bb3fd80a7648283d2a" kind="define"><name>AMPKEY_API</name></member>
+  </compound>
+  <compound refid="group__defs_8dox" kind="file"><name>group_defs.dox</name>
+  </compound>
+  <compound refid="keyer_8h" kind="file"><name>keyer.h</name>
+  </compound>
+  <compound refid="keyer__impl_8h" kind="file"><name>keyer_impl.h</name>
+  </compound>
+  <compound refid="main__page_8dox" kind="file"><name>main_page.dox</name>
+  </compound>
+  <compound refid="samp__delay_8h" kind="file"><name>samp_delay.h</name>
+  </compound>
+  <compound refid="samp__delay__impl_8h" kind="file"><name>samp_delay_impl.h</name>
+  </compound>
+  <compound refid="group__block" kind="group"><name>block</name>
+  </compound>
+  <compound refid="dir_c954e569dac50ae201052642522c91c9" kind="dir"><name>ampkey</name>
+  </compound>
+  <compound refid="dir_49e56c817e5e54854c35e136979f97ca" kind="dir"><name>docs</name>
+  </compound>
+  <compound refid="dir_359d2bec989c9a8deeeb9aee335c1c76" kind="dir"><name>doxygen</name>
+  </compound>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
+  </compound>
+  <compound refid="dir_97aefd0d527b934f1d99a682da8fe6a9" kind="dir"><name>lib</name>
+  </compound>
+  <compound refid="dir_f2cd86917185299abf5a1f0679072f3c" kind="dir"><name>other</name>
+  </compound>
+  <compound refid="indexpage" kind="page"><name>index</name>
+  </compound>
+</doxygenindex>

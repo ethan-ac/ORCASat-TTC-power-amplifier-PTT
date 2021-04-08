@@ -9,14 +9,11 @@
 
 %{
 #include "ampkey/samp_delay.h"
-#include "ampkey/updater.h"
 #include "ampkey/amp_ptt.h"
 %}
 
 %include "ampkey/samp_delay.h"
 GR_SWIG_BLOCK_MAGIC2(ampkey, samp_delay);
 
-%include "ampkey/updater.h"
-GR_SWIG_BLOCK_MAGIC2(ampkey, updater);
 %include "ampkey/amp_ptt.h"
 GR_SWIG_BLOCK_MAGIC2(ampkey, amp_ptt);

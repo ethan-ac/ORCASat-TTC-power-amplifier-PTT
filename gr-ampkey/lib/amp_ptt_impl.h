@@ -46,7 +46,9 @@
 
 namespace gr {
   namespace ampkey {
-
+  
+  bool samples_incoming;
+  
     class amp_ptt_impl : public amp_ptt
     {
      private:
@@ -60,8 +62,10 @@ namespace gr {
       // time (ms) to add to clock to create target time
       // time before data is sent
       int d_pre_tx;
-      //time after data is sent
+      // time after data is sent
       int d_post_tx;
+      // time during data sending
+      int amp_tx;
       
       // will be used to toggle rts# pin on usb/serial cable
       int USB;
@@ -90,6 +94,9 @@ namespace gr {
       
       // location of file that controls USB/serial cable
       std::string d_file;
+      
+      // whether the samples received are from a packet or a unmodulated carrier
+      bool d_is_packet;
 
      public:
       amp_ptt_impl(size_t itemsize, int pre_tx, int post_tx, std::string file);

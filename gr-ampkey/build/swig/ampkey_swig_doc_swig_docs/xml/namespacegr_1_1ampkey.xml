@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="namespacegr_1_1ampkey" kind="namespace" language="C++">
+    <compoundname>gr::ampkey</compoundname>
+    <innerclass refid="classgr_1_1ampkey_1_1keyer" prot="public">gr::ampkey::keyer</innerclass>
+    <innerclass refid="classgr_1_1ampkey_1_1samp__delay" prot="public">gr::ampkey::samp_delay</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/ethan/gr-ampkey/include/ampkey/keyer.h" line="28" column="18"/>
+  </compounddef>
+</doxygen>

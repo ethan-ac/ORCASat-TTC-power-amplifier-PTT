@@ -27,6 +27,8 @@
 
 namespace gr {
   namespace ampkey {
+  
+  extern bool samples_incoming;
 
     samp_delay::sptr samp_delay::make(size_t itemsize, int pre_tx, int samp_rate)
     {
@@ -95,7 +97,7 @@ namespace gr {
         	
         	// main clock loop
         	// starts clock when target_millis is set larger than current_millis
-        	if(target_millis > current_millis){
+        	if (target_millis > current_millis) {
         		// update current_millis
     	    		current_millis = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     	    		
@@ -103,6 +105,7 @@ namespace gr {
     	    		if(target_millis <= current_millis){
     				// reset d_delta so delay samples will be inserted at beginning of next packets samples
     				d_delta = pre_tx_samp;
+    				samples_incoming = false;
     			}
 		}
     	}
@@ -157,6 +160,8 @@ namespace gr {
     	// ending_millis is amount of time after last sample is received before it is determined it was the final sample of a packet
     	// target time is the time when it can be assumed that the final sample of a packet has been received
     	target_millis = current_millis + ending_millis;
+    	
+    	samples_incoming = true;
     	
     	// No change in delay; just pass actual samples
     	//runs a few times at flowgraph startup to pad

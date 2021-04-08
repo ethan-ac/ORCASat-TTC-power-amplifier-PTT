@@ -52,7 +52,7 @@ blocks:
     bus_structure: null
     coordinate: [328, 212.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: ampkey_samp_delay_0
   id: ampkey_samp_delay
   parameters:
